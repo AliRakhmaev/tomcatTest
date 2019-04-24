@@ -9,8 +9,23 @@
     <servlet-class>HelloServlet</servlet-class>
   </servlet>
 
+
+  <servlet>
+    <servlet-name>makeAShoutServlet</servlet-name>
+    <servlet-class>makeAShoutServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>HelloServlet</servlet-name>
     <url-pattern>/servlet</url-pattern>
   </servlet-mapping>
+
+
+
+  <servlet-mapping>
+    <servlet-name>makeAShoutServlet</servlet-name>
+    <url-pattern>/userHitServlet</url-pattern>
+  </servlet-mapping>
+
+
 </web-app>
