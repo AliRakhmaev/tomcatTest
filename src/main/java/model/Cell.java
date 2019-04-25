@@ -2,7 +2,11 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Cell {
+/**
+ * 0 - пустая, 1 - проверянная пустая клетка, 2 - проверянная клетка с ранением, 3 - клетка уничтоженного корабля, 4 - клетка с вашим кораблём
+ */
+
+public class Cell implements Entity{
     @JsonProperty private int x;
     @JsonProperty private int y;
     @JsonProperty private int state;

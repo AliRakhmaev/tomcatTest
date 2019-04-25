@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class Ship {
+/**
+ * 0 - alive, 1 - died
+ */
+public class Ship implements Entity{
     @JsonProperty ("cells") private List<Cell> cells;
     @JsonProperty ("state") private int state;
 
@@ -22,5 +25,13 @@ public class Ship {
 
     public void setCells(List<Cell> cells) {
         this.cells = cells;
+    }
+
+    public Ship() {
+    }
+
+    public Ship(List<Cell> cells, int state) {
+        this.cells = cells;
+        this.state = state;
     }
 }
