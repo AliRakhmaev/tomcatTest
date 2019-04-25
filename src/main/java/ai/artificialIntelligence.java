@@ -184,6 +184,90 @@ public class artificialIntelligence {
     }
 
     private List<Ship> pasteSmallShips(List<Ship> ships){
+        ArrayList<Cell> allCells = new ArrayList<>();
 
+        for (int i = 0; i < 10; i++){ // x axis
+            for (int j = 0; j < 10; j++){ // y axis
+                allCells.add(new Cell(0, i, j));
+            }
+        }
+
+        int currentX = 0;
+        int currentY = 0;
+
+        for (int i = 0; i < ships.size(); i++){ // ships loop
+            for (int j = 0; j < ships.get(i).getCells().size(); j++) {// loop for cells that constitute ship
+                currentX = ships.get(i).getCells().get(j).getX();
+                currentY = ships.get(i).getCells().get(j).getY();
+                changeTheStateOfNeighboursOfCertainCell(currentX, currentY, 1, allCells);
+            }
+        }
+
+        ArrayList<Cell> emptyCells = new ArrayList<>();
+
+        for(int i = 0; i < allCells.size(); i++){
+            if( allCells.get(i).getState() == 0){
+                emptyCells.add(allCells.get(i));
+            }
+        }
+
+        int indexForPuttingSmallShip = random.nextInt(emptyCells.size());
+
+
+        // DELETE THIS!!!
+        return ships;
+    }
+
+    // Теперь проходимся по всем соседям, при условии того, что они не за границами, и меняем их состояние на
+    // занятые, т.е. эти ячейки не могут быть заняты единичными корабликами
+    private void changeTheStateOfNeighboursOfCertainCell(int currentX, int currentY, int state, List<Cell> allCells){
+
+        // ячейка может быть перезаписана случайно, нужно этого избежать дав ей состояние корабля
+        for(int k = 0; k < allCells.size(); k++){
+            if(allCells.get(k).getX() == currentX && allCells.get(k).getY() == currentY){
+                allCells.get(k).setState(4);
+            }
+        }
+
+        if ( currentX - 1 >= 0 && currentX - 1 <= 9 && currentY - 1 >= 0 && currentY - 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX - 1 && allCells.get(k).getY() == currentY - 1){
+                    if(allCells.get(k).getState() != 4) // чтобы ячейка одного корабля не стёрла состояние соседней ячейки, того же корабля
+                    allCells.get(k).setState(1);
+                }
+            }
+        }
+
+        if (currentY - 1 >= 0 && currentY - 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX && allCells.get(k).getY() == currentY - 1){
+                    allCells.get(k).setState(1);
+                }
+            }
+        }
+
+        if (currentX - 1 >= 0 && currentX - 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX - 1 && allCells.get(k).getY() == currentY){
+                    allCells.get(k).setState(1);
+                }
+            }
+        }
+
+        if ( currentX + 1 >= 0 && currentX + 1 <= 9 && currentY - 1 >= 0 && currentY - 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX + 1 && allCells.get(k).getY() == currentY - 1){
+                    allCells.get(k).setState(1);
+                }
+            }
+        }
+
+        if ( currentX - 1 >= 0 && currentX + 1 <= 9 && currentY - 1 >= 0 && currentY - 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX + 1 && allCells.get(k).getY() == currentY - 1){
+                    allCells.get(k).setState(1);
+                }
+            }
+        }
     }
 }
