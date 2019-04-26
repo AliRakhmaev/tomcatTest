@@ -272,6 +272,10 @@ function clickOpponentCell(){
         data: JSON.stringify(cell),
         success: function (data) {
             console.log(data);
+        },
+        error:function(data){
+            console.log('error');
+            console.log(data);
         }
     });
     //бьет , просит ударить, отвечает на удар
