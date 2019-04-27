@@ -14,14 +14,15 @@ public class makeAShoutServlet extends HttpServlet {
 
         ObjectMapper mapper = new ObjectMapper();
         Cell cell = mapper.readValue(httpServletRequest.getReader(), Cell.class);
-            System.out.println("cell state = " + cell.getState());
-            System.out.println("cell x = " + cell.getX());
-            System.out.println("cell y = " + cell.getY());
+        System.out.println("cell state = " + cell.getState());
+        System.out.println("cell x = " + cell.getX());
+        System.out.println("cell y = " + cell.getY());
 
-            cell.setState(2);
-         String jsonString = mapper.writeValueAsString(cell);
+        // Здесь применить метод реагирования на выстрел
+        cell.setState(2);
+        String jsonString = mapper.writeValueAsString(cell);
 
-         httpServletResponse.setContentType("application/json");
+        httpServletResponse.setContentType("application/json");
 
         PrintWriter writer = httpServletResponse.getWriter();
         try {

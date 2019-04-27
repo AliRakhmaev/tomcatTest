@@ -213,7 +213,6 @@ public class artificialIntelligence {
 
         int indexForPuttingSmallShip = random.nextInt(emptyCells.size());
 
-
         // DELETE THIS!!!
         return ships;
     }
@@ -233,7 +232,7 @@ public class artificialIntelligence {
             for(int k = 0; k < allCells.size(); k++){
                 if(allCells.get(k).getX() == currentX - 1 && allCells.get(k).getY() == currentY - 1){
                     if(allCells.get(k).getState() != 4) // чтобы ячейка одного корабля не стёрла состояние соседней ячейки, того же корабля
-                    allCells.get(k).setState(1);
+                    allCells.get(k).setState(state);
                 }
             }
         }
@@ -241,7 +240,8 @@ public class artificialIntelligence {
         if (currentY - 1 >= 0 && currentY - 1 <= 9){
             for(int k = 0; k < allCells.size(); k++){
                 if(allCells.get(k).getX() == currentX && allCells.get(k).getY() == currentY - 1){
-                    allCells.get(k).setState(1);
+                    if(allCells.get(k).getState() != 4)
+                    allCells.get(k).setState(state);
                 }
             }
         }
@@ -249,7 +249,8 @@ public class artificialIntelligence {
         if (currentX - 1 >= 0 && currentX - 1 <= 9){
             for(int k = 0; k < allCells.size(); k++){
                 if(allCells.get(k).getX() == currentX - 1 && allCells.get(k).getY() == currentY){
-                    allCells.get(k).setState(1);
+                    if(allCells.get(k).getState() != 4)
+                    allCells.get(k).setState(state);
                 }
             }
         }
@@ -257,15 +258,44 @@ public class artificialIntelligence {
         if ( currentX + 1 >= 0 && currentX + 1 <= 9 && currentY - 1 >= 0 && currentY - 1 <= 9){
             for(int k = 0; k < allCells.size(); k++){
                 if(allCells.get(k).getX() == currentX + 1 && allCells.get(k).getY() == currentY - 1){
-                    allCells.get(k).setState(1);
+                    if(allCells.get(k).getState() != 4)
+                        allCells.get(k).setState(state);
                 }
             }
         }
 
-        if ( currentX - 1 >= 0 && currentX + 1 <= 9 && currentY - 1 >= 0 && currentY - 1 <= 9){
+        if ( currentX - 1 >= 0 && currentX - 1 <= 9 && currentY + 1 >= 0 && currentY + 1 <= 9){
             for(int k = 0; k < allCells.size(); k++){
-                if(allCells.get(k).getX() == currentX + 1 && allCells.get(k).getY() == currentY - 1){
-                    allCells.get(k).setState(1);
+                if(allCells.get(k).getX() == currentX - 1 && allCells.get(k).getY() == currentY + 1){
+                    if(allCells.get(k).getState() != 4)
+                    allCells.get(k).setState(state);
+                }
+            }
+        }
+
+        if (currentY + 1 >= 0 && currentY + 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX && allCells.get(k).getY() == currentY + 1){
+                    if(allCells.get(k).getState() != 4)
+                    allCells.get(k).setState(state);
+                }
+            }
+        }
+
+        if ( currentX + 1 >= 0 && currentX + 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX + 1 && allCells.get(k).getY() == currentY){
+                    if(allCells.get(k).getState() != 4)
+                    allCells.get(k).setState(state);
+                }
+            }
+        }
+
+        if ( currentX + 1 >= 0 && currentX + 1 <= 9 && currentY + 1 >= 0 && currentY + 1 <= 9){
+            for(int k = 0; k < allCells.size(); k++){
+                if(allCells.get(k).getX() == currentX + 1 && allCells.get(k).getY() == currentY + 1){
+                    if(allCells.get(k).getState() != 4)
+                    allCells.get(k).setState(state);
                 }
             }
         }
