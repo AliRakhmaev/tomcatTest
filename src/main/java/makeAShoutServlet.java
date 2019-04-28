@@ -2,6 +2,7 @@
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import ai.ArtificialIntelligence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.*;
@@ -9,18 +10,25 @@ import model.*;
 public class makeAShoutServlet extends HttpServlet {
     public void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws IOException {
-
-    //    Cell cell = new Cell(Integer.parseInt(httpServletRequest.getParameter("state")), Integer.parseInt(httpServletRequest.getParameter("x")),Integer.parseInt(httpServletRequest.getParameter("y")));
-
         ObjectMapper mapper = new ObjectMapper();
+        String jsonString;
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence();
         Cell cell = mapper.readValue(httpServletRequest.getReader(), Cell.class);
         System.out.println("cell state = " + cell.getState());
         System.out.println("cell x = " + cell.getX());
         System.out.println("cell y = " + cell.getY());
 
         // Здесь применить метод реагирования на выстрел
-        cell.setState(2);
-        String jsonString = mapper.writeValueAsString(cell);
+
+        Entity result = artificialIntelligence.checkTheResultOfPlayerShout(cell);
+
+        // Проверяем что же нам выдал метод. Аль ячейка аль кораблик
+        if(result instanceof Cell){
+            jsonString = mapper.writeValueAsString((Cell)result);
+        }
+        else{
+            jsonString = mapper.writeValueAsString((Ship)result);
+        }
 
         httpServletResponse.setContentType("application/json");
 
