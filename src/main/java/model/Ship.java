@@ -34,4 +34,12 @@ public class Ship implements Entity{
         this.cells = cells;
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "cells=" + cells +
+                ", state=" + state +
+                '}';
+    }
 }
