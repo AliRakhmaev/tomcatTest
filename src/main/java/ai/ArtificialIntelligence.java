@@ -188,7 +188,155 @@ public class ArtificialIntelligence {
         }
 
 ///////////////////////////////////// Делаем проверку на наличие раненых кораблей//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<Cell> injured = new ArrayList<>();
+        for( int i = 0; i < cellsAtPlayer.size(); i++){ // Идём по всем ячейкам и ищем раненые среди них
+            if(cellsAtPlayer.get(i).getState() == 2){
+                injured.add(cellsAtPlayer.get(i));
+            }
+        }
 
+        if(injured.size() == 1) {// Просто пробуем стрельнуть в соседей этой клетки
+            // выбираем одно из четырёх направлений
+            List<Cell> possibleDirectionsForSearching = new ArrayList<>();
+
+            for(int i = 0; i < cellsAtPlayer.size(); i++) { // идём по всем ячейкам
+                    if ((cellsAtPlayer.get(i).getX() == injured.get(0).getX() - 1) && cellsAtPlayer.get(i).getY() == injured.get(0).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                        possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX() - 1, injured.get(0).getY()));
+                    }
+                    if (cellsAtPlayer.get(i).getX() == injured.get(0).getX() && (cellsAtPlayer.get(i).getY() == injured.get(0).getY() - 1) && cellsAtPlayer.get(i).getState() == 0) {
+                        possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX(), injured.get(0).getY() - 1));
+                    }
+                    if ((cellsAtPlayer.get(i).getX() == injured.get(0).getX() + 1) && cellsAtPlayer.get(i).getY() == injured.get(0).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                        possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX() + 1, injured.get(0).getY()));
+                    }
+                    if (cellsAtPlayer.get(i).getX() == injured.get(0).getX() && (cellsAtPlayer.get(i).getY() == injured.get(0).getY() + 1) && cellsAtPlayer.get(i).getState() == 0) {
+                        possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX(), injured.get(0).getY() + 1));
+                    }
+            }
+            // Убиваем сразу двух зайцев: с одной стороны мы понимаем что данные ячейки достижимы, иначе бы их не было в списке всех ячеек
+            // Во вторых мы можем сразу проверить их статус, т.е. если они уже проверены, то нет смысла их проверять
+            // В итоге из доступных положений выбираем случайно одно и стреляем по нему
+            return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+        }
+
+        if(injured.size() == 2){ // Раненым здесь могут быть только трёхпалубники или четырёхпалубник
+            List<Cell> possibleDirectionsForSearching = new ArrayList<>();
+
+            // Надо выяснить как они расположены - в строку или в столбец. И выбрать ячейки для дальнейшего поиска уже исходя из этого
+            if (injured.get(0).getX() == injured.get(1).getX()) { // расположены вертикально
+                if (injured.get(0).getY() < injured.get(1).getY()) { // если первая ячейка расположена выше
+                    // Берём ячейку либо выше раненых либо ниже
+                    // Естественно проверяем на не была ли проверяна
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if (cellsAtPlayer.get(i).getX() == injured.get(0).getX() && (cellsAtPlayer.get(i).getY() == injured.get(0).getY() - 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX(), injured.get(0).getY() - 1));
+                        }
+                        if (cellsAtPlayer.get(i).getX() == injured.get(1).getX() && (cellsAtPlayer.get(i).getY() == injured.get(1).getY() + 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(1).getX(), injured.get(1).getY() + 1));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                } else if (injured.get(0).getY() > injured.get(1).getY()) { // если вторая ячейка расположена выше
+                    // Берём ячейку либо выше раненых либо ниже
+                    // Естественно проверяем на не была ли проверяна
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if (cellsAtPlayer.get(i).getX() == injured.get(1).getX() && (cellsAtPlayer.get(i).getY() == injured.get(1).getY() - 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(1).getX(), injured.get(1).getY() - 1));
+                        }
+                        if (cellsAtPlayer.get(i).getX() == injured.get(0).getX() && (cellsAtPlayer.get(i).getY() == injured.get(0).getY() + 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX(), injured.get(0).getY() + 1));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                }
+            } else if (injured.get(0).getY() == injured.get(1).getY()) { // расположены горизонатльно
+                if (injured.get(0).getX() < injured.get(1).getX()) { // если первая ячейка расположена левее
+                    // Берём ячейку либо левее раненых либо правее
+                    // Естественно проверяем на "не была ли проверяна"
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(0).getX() - 1) && cellsAtPlayer.get(i).getY() == injured.get(0).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX() - 1, injured.get(0).getY()));
+                        }
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(1).getX() + 1) && cellsAtPlayer.get(i).getY() == injured.get(1).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(1).getX() + 1, injured.get(1).getY()));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                } else if (injured.get(0).getX() > injured.get(1).getX()) { // если вторая ячейка расположена левее
+                    // Берём ячейку либо левее раненых либо правее
+                    // Естественно проверяем на не была ли проверяна
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(1).getX() - 1) && cellsAtPlayer.get(i).getY() == injured.get(1).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(1).getX() - 1, injured.get(1).getY()));
+                        }
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(0).getX() + 1) && cellsAtPlayer.get(i).getY() == injured.get(0).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX() + 1, injured.get(0).getY()));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                }
+            }
+        }
+
+        if(injured.size() == 3) { // Раненым здесь может быть только четырёхпалубник
+            // Три раненые ячейки не могут располагаться в хаотичном порядке. У них одна координата у всех совпадает (отсюда понмиает в строке искать соседа для выстрела или
+            // в столбце), а по другой координате они отсортированны
+            List<Cell> possibleDirectionsForSearching = new ArrayList<>();
+
+            if (injured.get(0).getX() == injured.get(2).getX()) { // расположены вертикально
+                if (injured.get(0).getY() < injured.get(2).getY()) { // если первая ячейка расположена выше
+                    // Берём ячейку либо выше раненых либо ниже
+                    // Естественно проверяем на не была ли проверяна
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if (cellsAtPlayer.get(i).getX() == injured.get(0).getX() && (cellsAtPlayer.get(i).getY() == injured.get(0).getY() - 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX(), injured.get(0).getY() - 1));
+                        }
+                        if (cellsAtPlayer.get(i).getX() == injured.get(2).getX() && (cellsAtPlayer.get(i).getY() == injured.get(2).getY() + 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(1).getX(), injured.get(1).getY() + 1));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                } else if (injured.get(0).getY() > injured.get(2).getY()) { // если вторая ячейка расположена выше
+                    // Берём ячейку либо выше раненых либо ниже
+                    // Естественно проверяем на не была ли проверяна
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if (cellsAtPlayer.get(i).getX() == injured.get(2).getX() && (cellsAtPlayer.get(i).getY() == injured.get(2).getY() - 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(1).getX(), injured.get(1).getY() - 1));
+                        }
+                        if (cellsAtPlayer.get(i).getX() == injured.get(0).getX() && (cellsAtPlayer.get(i).getY() == injured.get(0).getY() + 1) && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX(), injured.get(0).getY() + 1));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                }
+            } else if (injured.get(0).getY() == injured.get(2).getY()) { // расположены горизонатльно
+                if (injured.get(0).getX() < injured.get(2).getX()) { // если первая ячейка расположена левее
+                    // Берём ячейку либо левее раненых либо правее
+                    // Естественно проверяем на "не была ли проверяна"
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(0).getX() - 1) && cellsAtPlayer.get(i).getY() == injured.get(0).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX() - 1, injured.get(0).getY()));
+                        }
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(2).getX() + 1) && cellsAtPlayer.get(i).getY() == injured.get(2).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(2).getX() + 1, injured.get(1).getY()));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                } else if (injured.get(0).getX() > injured.get(2).getX()) { // если вторая ячейка расположена левее
+                    // Берём ячейку либо левее раненых либо правее
+                    // Естественно проверяем на не была ли проверяна
+                    for (int i = 0; i < cellsAtPlayer.size(); i++) {
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(2).getX() - 1) && cellsAtPlayer.get(i).getY() == injured.get(2).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(2).getX() - 1, injured.get(1).getY()));
+                        }
+                        if ((cellsAtPlayer.get(i).getX() == injured.get(0).getX() + 1) && cellsAtPlayer.get(i).getY() == injured.get(0).getY() && cellsAtPlayer.get(i).getState() == 0) {
+                            possibleDirectionsForSearching.add(new Cell(0, injured.get(0).getX() + 1, injured.get(0).getY()));
+                        }
+                    }
+                    return possibleDirectionsForSearching.get(random.nextInt(possibleDirectionsForSearching.size()));
+                }
+            }
+        }
 /////////////////////////////////////////////////////////////////ЕСЛИ РАНЕНИЙ НЕ БЫЛО      ЕСЛИ РАНЕНИЙ НЕ БЫЛО//////////////////////////////////////////////////////////////////////////////////////////
         if(biggestShipIsAlive){
             currentStrategy.add(new Cell(0, 0,3));
@@ -289,10 +437,12 @@ public class ArtificialIntelligence {
      */
     public void analyseTheResultOfAIShoutAtUserShips(Ship result) {
 
-        // Меняем статус корабля на убитый
-        result.setState(0);
-        int indexOfDestroyedShip = shipsAtPlayer.indexOf(result);
-        shipsAtPlayer.get(indexOfDestroyedShip).setState(1);
+        // Проходимся по кораблям и ищем корабль тех же размеров, но живой и меняем его состояние на мёртвый
+        for(int i = 0; i < shipsAtPlayer.size(); i++){
+            if(shipsAtPlayer.get(i).getCells().size() == result.getCells().size() && shipsAtPlayer.get(i).getState() == 0){
+                shipsAtPlayer.get(i).setState(1);
+            }
+        }
 
         // Меняем статус ячеек данного корабля на убитые
         for (Cell cell : cellsAtPlayer) {
@@ -305,7 +455,7 @@ public class ArtificialIntelligence {
 
         // Делаем соседние клетки закрашенными, по ним стрелять не надо
         for(int i = 0; i < result.getCells().size(); i++){
-            cellsAtPlayer = changeTheStateOfNeighboursOfCertainCell(shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(i).getX(), shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(i).getY(), 1, 3, cellsAtPlayer);
+            cellsAtPlayer = changeTheStateOfNeighboursOfCertainCell(result.getCells().get(i).getX(), result.getCells().get(i).getY(), 1, 3, cellsAtPlayer);
         }
     }
 

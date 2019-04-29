@@ -1,6 +1,9 @@
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import ai.ArtificialIntelligence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +16,7 @@ public class PlayerShipDestroyedServlet extends HttpServlet{
      */
     public void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws IOException {
+
         ObjectMapper mapper = new ObjectMapper();
         String jsonString;
         ArtificialIntelligence artificialIntelligence;
@@ -28,11 +32,18 @@ public class PlayerShipDestroyedServlet extends HttpServlet{
         }
 
         if(shipDTO.getState() == 2){ // Ждёмс от кожаного признания нашего превосходства). Просто удаляем эту игру
+            System.out.println("The game is end");
             ArtificialIntelligence.hashMapOfUsers.remove(shipDTO.getUserId());
         }
         else { // Игрок ещё держится, но здоровье у его флотилии уже не то)
             // Преобразуем DTO в нормальную клетку
-            Ship ship = new Ship(shipDTO.getCells(), shipDTO.getState());
+            List<Cell> cellsForThisShip = new ArrayList<>();
+
+            for(int i = 0; i < shipDTO.getCells().size(); i++){
+                cellsForThisShip.add(new Cell(shipDTO.getCells().get(i).getState(), shipDTO.getCells().get(i).getX(), shipDTO.getCells().get(i).getY()));
+            }
+
+            Ship ship = new Ship(cellsForThisShip, shipDTO.getState());
             artificialIntelligence.analyseTheResultOfAIShoutAtUserShips(ship);
         }
     }

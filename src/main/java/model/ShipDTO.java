@@ -5,24 +5,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class ShipDTO {
-    @JsonProperty ("cells") private List<Cell> cells;
+    @JsonProperty ("cells") private List<CellDTO> cells;
     @JsonProperty ("state") private int state;
     @JsonProperty private String userId;
 
     public ShipDTO() {
     }
 
-    public ShipDTO(List<Cell> cells, int state, String userId) {
+    public ShipDTO(List<CellDTO> cells, int state, String userId) {
         this.cells = cells;
         this.state = state;
         this.userId = userId;
     }
 
-    public List<Cell> getCells() {
+    public List<CellDTO> getCells() {
         return cells;
     }
 
-    public void setCells(List<Cell> cells) {
+    public void setCells(List<CellDTO> cells) {
         this.cells = cells;
     }
 

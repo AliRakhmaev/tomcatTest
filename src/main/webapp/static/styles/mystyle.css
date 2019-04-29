@@ -65,11 +65,7 @@ h1{
     width: 100px;
 }
 
-.killed_cell{
-    background-size: cover;
-    background-position:0 0%;
-    background-image: url(/static/images/fields_images/killed1.png);
-}
+
 
 .hurt_cell{
     background-size: cover;
@@ -80,6 +76,11 @@ h1{
     background-size: cover;
     background-position:0 0%;
     background-image: url(/static/images/fields_images/hit-by/1.png);
+}
+.killed_cell{
+    background-size: cover;
+    background-position:0 0%;
+    background-image: url(/static/images/fields_images/killed1.png);
 }
 .endOfgame{
     width: 96%;

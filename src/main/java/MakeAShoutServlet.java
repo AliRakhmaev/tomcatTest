@@ -14,10 +14,6 @@ public class MakeAShoutServlet extends HttpServlet {
         String jsonString;
         ArtificialIntelligence artificialIntelligence;
         CellDTO cellDTO = mapper.readValue(httpServletRequest.getReader(), CellDTO.class);
-        System.out.println("cell state = " + cellDTO.getState());
-        System.out.println("cell x = " + cellDTO.getX());
-        System.out.println("cell y = " + cellDTO.getY());
-        System.out.println("cell userId = " + cellDTO.getUserId());
 
         // Проверяем, новый это игрок или существующий и применяем соответсвующие действия
         if(ArtificialIntelligence.hashMapOfUsers.containsKey(cellDTO.getUserId())){ // игрок нам знаком, он будет взаимодейстовать со своим ИИ
