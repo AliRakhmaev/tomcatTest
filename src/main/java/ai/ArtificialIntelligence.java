@@ -337,7 +337,8 @@ public class ArtificialIntelligence {
 
                 }
             }
-        } else if (ThreeCellShipsAreAlive) { // ПРОВЕРЯЕМ РАНЕНИЯ У ТРЁХПАЛУБНИКОВ///////////***
+        }
+        if (ThreeCellShipsAreAlive) { // ПРОВЕРЯЕМ РАНЕНИЯ У ТРЁХПАЛУБНИКОВ///////////***
             for (int i = 0; i < shipsAtPlayer.size(); i++) {
                 if (shipsAtPlayer.get(i).getCells().size() == 3) {
                     List<Cell> injuredCells = new ArrayList<>();
@@ -426,7 +427,8 @@ public class ArtificialIntelligence {
                     }
                 }
             }
-        } else if (TwoCellShipsAreAlive) { // ПРОВЕРЯЕМ РАНЕНИЯ У ДВУХПАЛУБНИКОВ///////////***
+        }
+        if (TwoCellShipsAreAlive) { // ПРОВЕРЯЕМ РАНЕНИЯ У ДВУХПАЛУБНИКОВ///////////***
             for (int i = 0; i < shipsAtPlayer.size(); i++) {
                 if (shipsAtPlayer.get(i).getCells().size() == 2) {
                     List<Cell> injuredCells = new ArrayList<>();
@@ -485,15 +487,21 @@ public class ArtificialIntelligence {
             currentStrategy.add(new Cell(0, 9,2));
 
             currentStrategy.add(new Cell(0, 6,9));
-            currentStrategy.add(new Cell(0, 5,8));
-            currentStrategy.add(new Cell(0, 4,7));
-            currentStrategy.add(new Cell(0, 3,6));
+            currentStrategy.add(new Cell(0, 7,8));
+            currentStrategy.add(new Cell(0, 8,7));
+            currentStrategy.add(new Cell(0, 9,6));
 
             // Проверяем есть ли в нашей стратегии уже проверянные ячейки
             // По необходимости удаляем их
             for( int i = 0; i < cellsAtPlayer.size(); i++){
-                if(cellsAtPlayer.get(i).getState() != 0 && currentStrategy.contains(cellsAtPlayer.get(i))){
-                    currentStrategy.remove(cellsAtPlayer.get(i));
+                if(cellsAtPlayer.get(i).getState() != 0){ // Есть ячейка которую проверять не стоит
+
+                    for(int k = 0; k < currentStrategy.size(); k++){
+                        if(cellsAtPlayer.get(i).getX() == currentStrategy.get(k).getX() && cellsAtPlayer.get(i).getY() == currentStrategy.get(k).getY()){ // Данная ячейка есть в нашей текущей стратегии, нужно её оотуда убрать
+                            currentStrategy.remove(k);
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -505,10 +513,17 @@ public class ArtificialIntelligence {
                     currentStrategy.add(cellsAtPlayer.get(i));
                 }
             }
-            // Очищаем от проверянных
+            // Проверяем есть ли в нашей стратегии уже проверянные ячейки
+            // По необходимости удаляем их
             for( int i = 0; i < cellsAtPlayer.size(); i++){
-                if(cellsAtPlayer.get(i).getState() != 0 && currentStrategy.contains(cellsAtPlayer.get(i))){
-                    currentStrategy.remove(cellsAtPlayer.get(i));
+                if(cellsAtPlayer.get(i).getState() != 0){ // Есть ячейка которую проверять не стоит
+
+                    for(int k = 0; k < currentStrategy.size(); k++){
+                        if(cellsAtPlayer.get(i).getX() == currentStrategy.get(k).getX() && cellsAtPlayer.get(i).getY() == currentStrategy.get(k).getY()){ // Данная ячейка есть в нашей текущей стратегии, нужно её оотуда убрать
+                            currentStrategy.remove(k);
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -538,16 +553,6 @@ public class ArtificialIntelligence {
                 break;
             }
         }
-
-        if(result.getState() == 2) { // ранена ячейка корабля
-            for (int i = 0; i < shipsAtPlayer.size(); i++) {
-                for (int j = 0; j < shipsAtPlayer.get(i).getCells().size(); j++) {
-                    if (result.getX() == shipsAtPlayer.get(i).getCells().get(j).getX() && result.getY() == shipsAtPlayer.get(i).getCells().get(j).getY()) {
-                        shipsAtPlayer.get(i).getCells().get(j).setState(result.getState());
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -561,18 +566,17 @@ public class ArtificialIntelligence {
         int indexOfDestroyedShip = shipsAtPlayer.indexOf(result);
         shipsAtPlayer.get(indexOfDestroyedShip).setState(1);
 
-        // Меняем статус ячеек данного корабля на раненые
-        for(int i = 0; i < cellsAtPlayer.size(); i++){
-            for(int j = 0; j < shipsAtPlayer.get(indexOfDestroyedShip).getCells().size(); j++){
-                if(cellsAtPlayer.get(i).getX() == shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(j).getX() && cellsAtPlayer.get(i).getY() == shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(j).getY()){
-                    cellsAtPlayer.get(i).setState(2);
-                    shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(j).setState(2);
+        // Меняем статус ячеек данного корабля на убитые
+        for (Cell cell : cellsAtPlayer) {
+            for (int j = 0; j < result.getCells().size(); j++) {
+                if (cell.getX() == result.getCells().get(j).getX() && cell.getY() == result.getCells().get(j).getY()) {
+                    cell.setState(3);
                 }
             }
         }
 
         // Делаем соседние клетки закрашенными, по ним стрелять не надо
-        for(int i = 0; i < shipsAtPlayer.get(indexOfDestroyedShip).getCells().size(); i++){
+        for(int i = 0; i < result.getCells().size(); i++){
             cellsAtPlayer = changeTheStateOfNeighboursOfCertainCell(shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(i).getX(), shipsAtPlayer.get(indexOfDestroyedShip).getCells().get(i).getY(), 1, 3, cellsAtPlayer);
         }
     }
