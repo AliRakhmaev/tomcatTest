@@ -7,7 +7,7 @@ import ai.ArtificialIntelligence;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.*;
 
-public class makeAShoutServlet extends HttpServlet {
+public class MakeAShoutServlet extends HttpServlet {
     public void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws IOException {
         ObjectMapper mapper = new ObjectMapper();

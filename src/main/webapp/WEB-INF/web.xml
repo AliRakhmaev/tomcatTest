@@ -5,21 +5,31 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
 
-
-
   <servlet>
-    <servlet-name>makeAShoutServlet</servlet-name>
-    <servlet-class>makeAShoutServlet</servlet-class>
+    <servlet-name>MakeAShoutServlet</servlet-name>
+    <servlet-class>MakeAShoutServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AIStrikesBackServlet</servlet-name>
+    <servlet-class>AIStrikesBackServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PlayerShipDestroyedServlet</servlet-name>
+    <servlet-class>PlayerShipDestroyedServlet</servlet-class>
   </servlet>
 
 
-
-
-
   <servlet-mapping>
-    <servlet-name>makeAShoutServlet</servlet-name>
+    <servlet-name>MakeAShoutServlet</servlet-name>
     <url-pattern>/userHitServlet</url-pattern>
   </servlet-mapping>
-
+  <servlet-mapping>
+    <servlet-name>AIStrikesBackServlet</servlet-name>
+    <url-pattern>/aiStrikesBackServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PlayerShipDestroyedServlet</servlet-name>
+    <url-pattern>/playerShipDestroyedServlet</url-pattern>
+  </servlet-mapping>
 
 </web-app>
