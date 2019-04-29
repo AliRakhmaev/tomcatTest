@@ -5,8 +5,13 @@ import model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ArtificialIntelligence {
+
+    // Статическое потокобезопасное хранилище пар ключ-значение, где ключ - уникальный идентификатор игрока, а значение - объект игровой сессии сним связанной
+    public static ConcurrentHashMap<String, ArtificialIntelligence> hashMapOfUsers = new ConcurrentHashMap<>();
+
     public List<Ship> shipsAtAI;
     public List<Cell> cellsAtPlayer;
     public List<Ship> shipsAtPlayer;

@@ -12,13 +12,24 @@ public class makeAShoutServlet extends HttpServlet {
             throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString;
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence();
-        Cell cell = mapper.readValue(httpServletRequest.getReader(), Cell.class);
-        System.out.println("cell state = " + cell.getState());
-        System.out.println("cell x = " + cell.getX());
-        System.out.println("cell y = " + cell.getY());
+        ArtificialIntelligence artificialIntelligence;
+        CellDTO cellDTO = mapper.readValue(httpServletRequest.getReader(), CellDTO.class);
+        System.out.println("cell state = " + cellDTO.getState());
+        System.out.println("cell x = " + cellDTO.getX());
+        System.out.println("cell y = " + cellDTO.getY());
+        System.out.println("cell userId = " + cellDTO.getUserId());
 
-        // Здесь применить метод реагирования на выстрел
+        // Проверяем, новый это игрок или существующий и применяем соответсвующие действия
+        if(ArtificialIntelligence.hashMapOfUsers.containsKey(cellDTO.getUserId())){ // игрок нам знаком, он будет взаимодейстовать со своим ИИ
+            artificialIntelligence = ArtificialIntelligence.hashMapOfUsers.get(cellDTO.getUserId());
+        }
+        else{                                                                       // игрок новый, создаём новый объект ИИ и добавляем новый элемент в hashMap
+            artificialIntelligence = new ArtificialIntelligence();
+            ArtificialIntelligence.hashMapOfUsers.put(cellDTO.getUserId(), artificialIntelligence);
+        }
+
+        // Преобразуем DTO в нормальную клетку
+        Cell cell = new Cell(cellDTO.getState(), cellDTO.getX(),cellDTO.getY());
 
         Entity result = artificialIntelligence.checkTheResultOfPlayerShout(cell);
 
