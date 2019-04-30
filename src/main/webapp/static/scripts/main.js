@@ -480,6 +480,9 @@ function killShip(ship) {
             }
         });
         //все корабли убиты => конец игры
+        endOfGame();
+        document.getElementById('btn_yes').addEventListener("click", clickRepeat);
+        document.getElementById('btn_no').addEventListener("click", clickNoRepeat);
     }
     else{
         console.log('отправляем корабль ship и запускаем заново ожидание');
