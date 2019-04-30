@@ -27,7 +27,7 @@ public class MakeAShoutServlet extends HttpServlet {
         // Преобразуем DTO в нормальную клетку
         Cell cell = new Cell(cellDTO.getState(), cellDTO.getX(),cellDTO.getY());
 
-        Entity result = artificialIntelligence.checkTheResultOfPlayerShout(cell);
+        Entity result = artificialIntelligence.checkTheResultOfPlayerShout(cell, cellDTO.getUserId());
 
         // Проверяем что же нам выдал метод. Аль ячейка аль кораблик
         if(result instanceof Cell){

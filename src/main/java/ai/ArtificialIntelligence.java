@@ -30,7 +30,7 @@ public class ArtificialIntelligence {
      * @param ячейка искусственного интеллекта, по которой стреляет игрок
      * @return ячейку - в случае промаха или ранения корабля, корабль - в случае уничтожения корабля и победы игрока
      */
-    public Entity checkTheResultOfPlayerShout (Cell cellUnderAttack){
+    public Entity checkTheResultOfPlayerShout (Cell cellUnderAttack, String userId){
         for( int i = 0; i < shipsAtAI.size(); i++){ // loop for ships
             for (int j = 0; j < shipsAtAI.get(i).getCells().size(); j++) { // loop for cells, which constitute certain ship
                 if (cellUnderAttack.getX() == shipsAtAI.get(i).getCells().get(j).getX() && cellUnderAttack.getY() == shipsAtAI.get(i).getCells().get(j).getY()) { // shout reached the goal
@@ -61,6 +61,7 @@ public class ArtificialIntelligence {
                         // We return the state 2 of the Ship if AI is defeated
                         if(allShipsAreDestroyed){
                             shipsAtAI.get(i).setState(2);
+                            hashMapOfUsers.remove(userId);
                             return shipsAtAI.get(i);
                         }
 
